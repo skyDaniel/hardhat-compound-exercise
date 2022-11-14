@@ -42,7 +42,7 @@ async function printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20
 }
 
 
-describe("CERC20 - Should be able to borrow/repay", function () {
+describe.skip("CERC20 - Should be able to borrow/repay", function () {
     let owner; // owner who deploys all contracts
     let user1, user2, user3;
 
@@ -166,7 +166,7 @@ describe("CERC20 - Should be able to borrow/repay", function () {
             cErc20TokenB 
         } = await loadFixture(deployContracts);
         
-        // First, give user1 & user2 initial balance for tokenA & token
+        // First, give user1 & user2 initial balance for tokenA & tokenB
         // Mint 1 tokenB for user1
         await erc20TokenB.connect(user1).mint(USER1_INITIAL_TOKEN_B_AMOUNT);
         expect(await erc20TokenB.balanceOf(user1.address)).to.equal(USER1_INITIAL_TOKEN_B_AMOUNT);

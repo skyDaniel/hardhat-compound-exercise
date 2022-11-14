@@ -5,7 +5,7 @@ const { expect } = require("chai");
 // Close warning: Duplicate definitions
 Logger.setLogLevel(LogLevel.ERROR);
 
-describe("CERC20 - Should be able to mint/redeem with token A", function () {
+describe.skip("CERC20 - Should be able to mint/redeem with token A", function () {
     let owner; // owner who deploys all contracts
     let user1, user2;
 
