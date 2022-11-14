@@ -6,7 +6,7 @@ const { impersonateAccount } = require("@nomicfoundation/hardhat-network-helpers
 // Close warning: Duplicate definitions
 Logger.setLogLevel(LogLevel.ERROR);
 
-describe.skip("Flashloan", function () {
+describe("Flashloan", function () {
     let owner; // owner who deploys all contracts
     let user1, user2, user3;
 
