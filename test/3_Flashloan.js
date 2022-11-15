@@ -55,6 +55,10 @@ describe("Flashloan", function () {
 
     const BINANCE_WALLET_ADDRESS = '0xF977814e90dA44bFA03b6295A0616a897441aceC';
 
+    const LENDING_POOL_ADDRESSES_PROVIDER_ADDRESS = "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5";
+    const UNISWAP_ROUTER_ADDRESS = "0xE592427A0AEce92De3Edee1F18E0157C05861564";
+
+
     const C_TOKEN_DECIMAL = 18;
     const CLOSE_FACTOR = ethers.utils.parseUnits("0.5", 18);
     const LIQUIDATION_INCENTIVE = ethers.utils.parseUnits("1.10", 18); // 10% extra reward for conducting liquidation
@@ -73,8 +77,11 @@ describe("Flashloan", function () {
     const USER1_CTOKEN_B_MINT_UNDERLYING_AMOUNT = ethers.utils.parseUnits("1000", 18);
     const USER1_CTOKEN_B_MINT_AMOUNT = ethers.utils.parseUnits("1000", 18);
     
-    const USER2_CTOKEN_A_MINT_UNDERLYING_AMOUNT = ethers.utils.parseUnits("5000", 6); // amount of USDC liquidity user2 provided to pool
-    const USER2_CTOKEN_A_MINT_AMOUNT = ethers.utils.parseUnits("5000", 18);
+    // const USER2_CTOKEN_A_MINT_UNDERLYING_AMOUNT = ethers.utils.parseUnits("5000", 6); // amount of USDC liquidity user2 provided to pool
+    // const USER2_CTOKEN_A_MINT_AMOUNT = ethers.utils.parseUnits("5000", 18);
+
+    const USER2_LIQUIDATE_TOKEN_A_AMOUNT = ethers.utils.parseUnits("2500", 6);
+
 
     async function initializeContracts() {
         const comptrollerFactory = await ethers.getContractFactory("Comptroller");
@@ -147,8 +154,7 @@ describe("Flashloan", function () {
             erc20TokenB,
             interestRateModel,
             cErc20TokenA,
-            cErc20TokenB,
-            // flashLoan
+            cErc20TokenB
         };
     }
 
@@ -160,8 +166,7 @@ describe("Flashloan", function () {
             erc20TokenB,
             interestRateModel,
             cErc20TokenA,
-            cErc20TokenB,
-            // flashLoan
+            cErc20TokenB
         } = await loadFixture(initializeContracts);
         
         // First, impersonate as Binance to give user1 & user2 initial balance for tokenA (USDC) & tokenB (UNI)
@@ -238,6 +243,29 @@ describe("Flashloan", function () {
         expect(error).to.equal(0);
         expect(user1Liquidity).to.equal(0);
         expect(user1Shortfall).to.gt(0);
+
+        // Deploy flashloan contract
+        const flashLoanFactory = await ethers.getContractFactory("MyFlashLoanReceiver");
+        const flashLoan = await flashLoanFactory.connect(user2).deploy(
+            LENDING_POOL_ADDRESSES_PROVIDER_ADDRESS,
+            UNISWAP_ROUTER_ADDRESS,
+            erc20TokenA.address,
+            erc20TokenB.address,
+            cErc20TokenA.address,
+            cErc20TokenB.address,
+            user1.address
+        );
+        await flashLoan.deployed();
+
+        await flashLoan.connect(user2).flashloan(
+            USDC_CONTRACT_ADDRESS,
+            USER2_LIQUIDATE_TOKEN_A_AMOUNT
+        );
+        
+        console.log("[After liquidating using flashloan]");
+        await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
+
+        expect(await erc20TokenA.balanceOf(user2.address)).to.gt(0);
     });
 
 });
