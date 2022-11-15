@@ -265,7 +265,9 @@ describe("Flashloan", function () {
         console.log("[After liquidating using flashloan]");
         await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
-        expect(await erc20TokenA.balanceOf(user2.address)).to.gt(0);
+        const user2Profit = await erc20TokenA.balanceOf(user2.address);
+        console.log(`User2 profit for liquiating using flashloan: ${user2Profit / 1e6} USDC`);
+        expect(user2Profit).to.gt(0);
     });
 
 });
