@@ -77,9 +77,6 @@ describe("Flashloan", function () {
     const USER1_CTOKEN_B_MINT_UNDERLYING_AMOUNT = ethers.utils.parseUnits("1000", 18);
     const USER1_CTOKEN_B_MINT_AMOUNT = ethers.utils.parseUnits("1000", 18);
     
-    // const USER2_CTOKEN_A_MINT_UNDERLYING_AMOUNT = ethers.utils.parseUnits("5000", 6); // amount of USDC liquidity user2 provided to pool
-    // const USER2_CTOKEN_A_MINT_AMOUNT = ethers.utils.parseUnits("5000", 18);
-
     const USER2_LIQUIDATE_TOKEN_A_AMOUNT = ethers.utils.parseUnits("2500", 6);
 
 
@@ -184,22 +181,16 @@ describe("Flashloan", function () {
         expect(await erc20TokenA.balanceOf(cErc20TokenA.address)).to.equal(USER2_INITIAL_TOKEN_A_AMOUNT);
         
         console.log("[Initial state]");
-        await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
+        // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
         
         // User1: Provide liquidity for tokenB by minting cTokenB from the pool
         await erc20TokenB.connect(user1).approve(cErc20TokenB.address, USER1_CTOKEN_B_MINT_UNDERLYING_AMOUNT);
         await cErc20TokenB.connect(user1).mint(USER1_CTOKEN_B_MINT_UNDERLYING_AMOUNT);
         expect(await erc20TokenB.balanceOf(cErc20TokenB.address)).to.equal(USER1_CTOKEN_B_MINT_UNDERLYING_AMOUNT);
         expect(await cErc20TokenB.balanceOf(user1.address)).to.equal(USER1_CTOKEN_B_MINT_AMOUNT);
-
-        // // User2: Provide liquidity for tokenA by minting cTokenA from the pool
-        // await erc20TokenA.connect(user2).approve(cErc20TokenA.address, USER2_CTOKEN_A_MINT_UNDERLYING_AMOUNT);
-        // await cErc20TokenA.connect(user2).mint(USER2_CTOKEN_A_MINT_UNDERLYING_AMOUNT);
-        // expect(await erc20TokenA.balanceOf(cErc20TokenA.address)).to.equal(USER2_CTOKEN_A_MINT_UNDERLYING_AMOUNT);
-        // expect(await cErc20TokenA.balanceOf(user2.address)).to.equal(USER2_CTOKEN_A_MINT_AMOUNT);
         
         console.log("[After providing liquidity]");
-        await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
+        // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         await comptroller.connect(user1).enterMarkets([cErc20TokenB.address]);
 
@@ -208,7 +199,7 @@ describe("Flashloan", function () {
         expect(await erc20TokenA.balanceOf(user1.address)).to.equal(USER1_BORROW_TOKEN_A_AMOUNT);
 
         console.log("[After user1 borrows 50 tokenA from the pool]");
-        await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
+        // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         return {
             comptroller,
@@ -263,7 +254,7 @@ describe("Flashloan", function () {
         );
         
         console.log("[After liquidating using flashloan]");
-        await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
+        // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         const user2Profit = await erc20TokenA.balanceOf(user2.address);
         console.log(`User2 profit for liquiating using flashloan: ${user2Profit / 1e6} USDC`);
