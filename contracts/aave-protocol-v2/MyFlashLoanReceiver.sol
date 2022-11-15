@@ -7,7 +7,7 @@ import { ILendingPoolAddressesProvider } from "./ILendingPoolAddressesProvider.s
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { CErc20 } from "../CErc20.sol";
 
-import "./uniswap-v3/ISwapRouter.sol";
+import "../uniswap-v3/ISwapRouter.sol";
 import "hardhat/console.sol"; // for printing debugging log in console
 
 /** 
