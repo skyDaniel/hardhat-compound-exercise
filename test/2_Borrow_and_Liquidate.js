@@ -42,7 +42,7 @@ async function printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20
 }
 
 
-describe.skip("CERC20 - Should be able to borrow/repay", function () {
+describe("CERC20 - Should be able to borrow/repay", function () {
     let owner; // owner who deploys all contracts
     let user1, user2, user3;
 
@@ -174,7 +174,7 @@ describe.skip("CERC20 - Should be able to borrow/repay", function () {
         await erc20TokenA.connect(user2).mint(USER2_INITIAL_TOKEN_A_AMOUNT);
         expect(await erc20TokenA.balanceOf(user2.address)).to.equal(USER2_INITIAL_TOKEN_A_AMOUNT);
 
-        console.log("[Initial state]");
+        // console.log("[Initial state]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
         
         // User1: Provide liquidity for tokenB by minting cTokenB from the pool
@@ -189,7 +189,7 @@ describe.skip("CERC20 - Should be able to borrow/repay", function () {
         expect(await erc20TokenA.balanceOf(cErc20TokenA.address)).to.equal(USER2_CTOKEN_A_MINT_AMOUNT);
         expect(await cErc20TokenA.balanceOf(user2.address)).to.equal(USER2_CTOKEN_A_MINT_AMOUNT);
         
-        console.log("[After providing liquidity]");
+        // console.log("[After providing liquidity]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         await comptroller.connect(user1).enterMarkets([cErc20TokenB.address]);
@@ -224,14 +224,14 @@ describe.skip("CERC20 - Should be able to borrow/repay", function () {
         await cErc20TokenA.connect(user1).borrow(USER1_BORROW_TOKEN_A_AMOUNT);
         expect(await erc20TokenA.balanceOf(user1.address)).to.equal(USER1_BORROW_TOKEN_A_AMOUNT);
 
-        console.log("[After user1 borrows 50 tokenA from the pool]");
+        // console.log("[After user1 borrows 50 tokenA from the pool]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         await erc20TokenA.connect(user1).approve(cErc20TokenA.address, USER1_BORROW_TOKEN_A_AMOUNT);
         await cErc20TokenA.connect(user1).repayBorrow(USER1_BORROW_TOKEN_A_AMOUNT);
         expect(await erc20TokenA.balanceOf(user1.address)).to.equal(0);
 
-        console.log("[After user1 repays 50 tokenA to the pool]");
+        // console.log("[After user1 repays 50 tokenA to the pool]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
     });
@@ -251,7 +251,7 @@ describe.skip("CERC20 - Should be able to borrow/repay", function () {
         await cErc20TokenA.connect(user1).borrow(USER1_BORROW_TOKEN_A_AMOUNT);
         expect(await erc20TokenA.balanceOf(user1.address)).to.equal(USER1_BORROW_TOKEN_A_AMOUNT);
 
-        console.log("[After user1 borrows 50 tokenA from the pool]");
+        // console.log("[After user1 borrows 50 tokenA from the pool]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         // Change collateral factor from 0.5 to 0.3
@@ -266,7 +266,7 @@ describe.skip("CERC20 - Should be able to borrow/repay", function () {
         let expectedSeizedToken = USER2_LIQUIDATE_TOKEN_A_AMOUNT.mul(tokenAPrice).div(tokenBPrice).mul(EXPECTED_SEIZED_TOKEN_MULTIPLER * 1e5).div(1e5);
         expect(await cErc20TokenB.balanceOf(user2.address)).to.equal(expectedSeizedToken);
 
-        console.log("[After user2 liquidate 70% tokenA loans for user1]");
+        // console.log("[After user2 liquidate 70% tokenA loans for user1]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
     });
@@ -286,7 +286,7 @@ describe.skip("CERC20 - Should be able to borrow/repay", function () {
         await cErc20TokenA.connect(user1).borrow(USER1_BORROW_TOKEN_A_AMOUNT);
         expect(await erc20TokenA.balanceOf(user1.address)).to.equal(USER1_BORROW_TOKEN_A_AMOUNT);
 
-        console.log("[After user1 borrows 50 tokenA from the pool]");
+        // console.log("[After user1 borrows 50 tokenA from the pool]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         // Change tokenB price from 100 to 80
@@ -301,7 +301,7 @@ describe.skip("CERC20 - Should be able to borrow/repay", function () {
         let expectedSeizedToken = USER2_LIQUIDATE_TOKEN_A_AMOUNT.mul(tokenAPrice).div(tokenBPrice).mul(EXPECTED_SEIZED_TOKEN_MULTIPLER * 1e5).div(1e5);
         expect(await cErc20TokenB.balanceOf(user2.address)).to.equal(expectedSeizedToken);
 
-        console.log("[After user2 liquidate 70% tokenA loans for user1]");
+        // console.log("[After user2 liquidate 70% tokenA loans for user1]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
     });

@@ -180,7 +180,7 @@ describe("Flashloan", function () {
         await erc20TokenA.connect(BINANCE_WALLET).transfer(cErc20TokenA.address, USER2_INITIAL_TOKEN_A_AMOUNT);
         expect(await erc20TokenA.balanceOf(cErc20TokenA.address)).to.equal(USER2_INITIAL_TOKEN_A_AMOUNT);
         
-        console.log("[Initial state]");
+        // console.log("[Initial state]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
         
         // User1: Provide liquidity for tokenB by minting cTokenB from the pool
@@ -189,7 +189,7 @@ describe("Flashloan", function () {
         expect(await erc20TokenB.balanceOf(cErc20TokenB.address)).to.equal(USER1_CTOKEN_B_MINT_UNDERLYING_AMOUNT);
         expect(await cErc20TokenB.balanceOf(user1.address)).to.equal(USER1_CTOKEN_B_MINT_AMOUNT);
         
-        console.log("[After providing liquidity]");
+        // console.log("[After providing liquidity]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         await comptroller.connect(user1).enterMarkets([cErc20TokenB.address]);
@@ -198,7 +198,7 @@ describe("Flashloan", function () {
         await cErc20TokenA.connect(user1).borrow(USER1_BORROW_TOKEN_A_AMOUNT);
         expect(await erc20TokenA.balanceOf(user1.address)).to.equal(USER1_BORROW_TOKEN_A_AMOUNT);
 
-        console.log("[After user1 borrows 50 tokenA from the pool]");
+        // console.log("[After user1 borrows 50 tokenA from the pool]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         return {
@@ -253,7 +253,7 @@ describe("Flashloan", function () {
             USER2_LIQUIDATE_TOKEN_A_AMOUNT
         );
         
-        console.log("[After liquidating using flashloan]");
+        // console.log("[After liquidating using flashloan]");
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         const user2Profit = await erc20TokenA.balanceOf(user2.address);
