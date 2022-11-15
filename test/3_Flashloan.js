@@ -61,7 +61,7 @@ describe("Flashloan", function () {
 
     const C_TOKEN_DECIMAL = 18;
     const CLOSE_FACTOR = ethers.utils.parseUnits("0.5", 18);
-    const LIQUIDATION_INCENTIVE = ethers.utils.parseUnits("1.10", 18); // 10% extra reward for conducting liquidation
+    const LIQUIDATION_INCENTIVE = ethers.utils.parseUnits("1.08", 18); // 8% extra reward for conducting liquidation
     const TOKEN_B_COLLATERAL_FACTOR = ethers.utils.parseUnits("0.5", 18);
 
     // Token A: USDC ($1)
@@ -235,6 +235,8 @@ describe("Flashloan", function () {
         expect(user1Liquidity).to.equal(0);
         expect(user1Shortfall).to.gt(0);
 
+        console.log(`User1 Shortfall: ${user1Shortfall / 1e18}`);
+
         // Deploy flashloan contract
         const flashLoanFactory = await ethers.getContractFactory("MyFlashLoanReceiver");
         const flashLoan = await flashLoanFactory.connect(user2).deploy(
@@ -257,7 +259,7 @@ describe("Flashloan", function () {
         // await printTokenBalances(erc20TokenA, erc20TokenB, cErc20TokenA, cErc20TokenB, user1, user2);
 
         const user2Profit = await erc20TokenA.balanceOf(user2.address);
-        console.log(`User2 profit for liquiating using flashloan: ${user2Profit / 1e6} USDC`);
+        console.log(`User2's profit for liquiating using flashloan: ${user2Profit / 1e6} USDC`);
         expect(user2Profit).to.gt(0);
     });
 

@@ -61,15 +61,19 @@ contract MyFlashLoanReceiver is FlashLoanReceiverBase {
 
         debtToken.approve(address(c_debtToken), amounts[0]);
         c_debtToken.liquidateBorrow(userToBeLiquidated, amounts[0], c_collateralToken);
-        
+
         // Redeem cUNI to UNI
         uint c_collateralTokenRedeemAmount = c_collateralToken.balanceOf(address(this));
         c_collateralToken.redeem(c_collateralTokenRedeemAmount);
+
+        console.log("Seized token (cUNI) from liquidating: %s cUNI", c_collateralTokenRedeemAmount);
 
         // Swap UNI to USDC:
         // Approve Uniswap to use all UNI balance
         uint collateralTokenBalance = collateralToken.balanceOf(address(this));
         collateralToken.approve(address(swapRouter), collateralTokenBalance);
+
+        console.log("UNI: %s UNI", collateralTokenBalance);
 
         // https://docs.uniswap.org/protocol/guides/swaps/single-swaps
         ISwapRouter.ExactInputSingleParams memory swapParams = ISwapRouter.ExactInputSingleParams({
@@ -90,6 +94,8 @@ contract MyFlashLoanReceiver is FlashLoanReceiverBase {
             uint amountPayback = amounts[i] + premiums[i];
             IERC20(assets[i]).approve(address(LENDING_POOL), amountPayback);
             IERC20(assets[i]).transfer(owner, debtTokenAmountOut - amountPayback);
+            console.log("Send back %s USDC to user2", debtTokenAmountOut);
+            console.log("Send back %s USDC to user2", debtTokenAmountOut - amountPayback);
         }
 
         return true;
